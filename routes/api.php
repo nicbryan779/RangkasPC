@@ -27,3 +27,9 @@ Route::get('/product', "ProductController@all");
 Route::get('/product/{id}', "ProductController@find");
 Route::delete('/product/{id}', "ProductController@delete");
 Route::put('/product/{id}', "ProductController@updateData");
+
+Route::post('/invoice', "InvoiceController@register");
+Route::get('/invoice', "InvoiceController@all");
+Route::get('/invoice/{id}', "InvoiceController@find");
+Route::delete('/invoice/{id}', "InvoiceController@delete");
+Route::put('/invoice/{id}', "InvoiceController@updateData");
