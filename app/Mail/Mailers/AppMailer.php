@@ -67,7 +67,6 @@ class AppMailer extends Mailable
 
   public function deliver()
   {
-    print_r($this->to);
           $this->mailer->send($this->view, $this->data, function ($message) {
           $message->from($this->from);
           $message->to($this->to);

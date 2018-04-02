@@ -32,7 +32,6 @@ class UserController extends Controller
       "zip"  => $request->zip,
       "token" => $token
     ];
-    $to=$request->email;
     try{
       $user = $this->user->create($user);
       $mailer->sendEmailConfirmationTo($user);
@@ -107,6 +106,28 @@ class UserController extends Controller
     }
     catch(Exception $ex){
       return response('Failed',400);
+    }
+  }
+  public function login(Request $request)
+  {
+    $user=[
+      "email" => $request->email,
+      "password" => md5($request->password),
+    ];
+    try
+    {
+      $check = $this->user->where("email",$user["email"])->where("password",$user["password"])->get();
+      if($check->isEmpty())
+      {
+        return ("Incorrect Email/Password");
+      }
+      else {
+        return ("Login Successful");
+      }
+    }
+    catch(Exception $ex)
+    {
+      return ("Login Failed!");
     }
   }
   public function confirmEmail($token,$id)

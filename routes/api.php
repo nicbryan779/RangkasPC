@@ -21,6 +21,7 @@ Route::get('/user', "UserController@all");
 Route::get('/user/{id}', "UserController@find");
 Route::delete('/user/{id}', "UserController@delete");
 Route::put('/user/{id}', "UserController@updateData");
+Route::post('/login', "UserController@login");
 
 Route::get('register/confirm/{token}/{id}', 'UserController@confirmEmail');
 
