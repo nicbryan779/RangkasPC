@@ -24,7 +24,9 @@ Route::put('/user/{id}', "UserController@updateData");
 Route::post('/login', "UserController@login");
 Route::post('/changepassword/{id}',"UserController@changepassword");
 
-Route::get('register/confirm/{token}/{id}', 'UserController@confirmEmail');
+Route::get('/register/confirm/{token}/{id}', 'UserController@confirmEmail');
+Route::get('/forgetpassword/{id}','UserController@forgotpassword');
+Route::post('/forgetpassword/{token}/{id}', 'UserController@newpass');
 
 Route::post('/product', "ProductController@register");
 Route::get('/product', "ProductController@all");

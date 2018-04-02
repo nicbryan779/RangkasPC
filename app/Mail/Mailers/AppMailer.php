@@ -72,4 +72,18 @@ class AppMailer extends Mailable
           $message->to($this->to);
       });
   }
+  public function sendForgetPasswordTo(Users $user)
+  {
+      $this->to = $user->email;
+      $this->view = 'forgetpassword';
+      $this->data = compact('user');
+      $this->deliverForgetPassword();
+  }
+  public function deliverForgetPassword()
+  {
+          $this->mailer->send($this->view, $this->data, function ($message) {
+          $message->from($this->from);
+          $message->to($this->to);
+      });
+  }
 }

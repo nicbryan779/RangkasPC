@@ -171,4 +171,44 @@ class UserController extends Controller
         return response($ex,400);
       }
   }
+  public function forgotpassword($id,AppMailer $mailer)
+  {
+    try
+    {
+      $mailer->sendForgetPasswordTo($this->user->find($id));
+      return ("An email has been sent to you");
+    }
+    catch (\Exception $e)
+    {
+      return ("Failed!");
+    }
+  }
+  public function newpass(Request $request,$token,$id)
+  {
+    try{
+      $user = $this->user->where('token',$token)->where('id',$id)->first();
+      $newpass = md5($request->newpass);
+      $confirm = md5($request->confirm);
+
+      $user = $this->user->find($id);
+
+      if($newpass == $confirm)
+      {
+          try{
+            $user->password = $newpass;
+            $user->save();
+            return ("Password Changed");
+          }
+          catch(Exception $ex){
+            return ("Failed!");
+          }
+      }
+      else {
+        return ("Re-type password does not match");
+      }
+    }
+    catch(Exception $ex){
+      return response($ex,400);
+    }
+  }
 }
