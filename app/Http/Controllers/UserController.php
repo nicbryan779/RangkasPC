@@ -130,6 +130,35 @@ class UserController extends Controller
       return ("Login Failed!");
     }
   }
+  public function changepassword(Request $request,$id)
+  {
+    $oldpass = md5($request->oldpass);
+    $newpass = md5($request->newpass);
+    $confirm = md5($request->confirm);
+
+    $user = $this->user->find($id);
+
+    if($newpass == $confirm)
+    {
+      if($user->password != $oldpass)
+      {
+        return ("Incorrect Password");
+      }
+      else {
+        try{
+          $user->password = $newpass;
+          $user->save();
+          return ("Password Changed");
+        }
+        catch(Exception $ex){
+          return ("Failed!");
+        }
+      }
+    }
+    else {
+      return ("Re-type password does not match");
+    }
+  }
   public function confirmEmail($token,$id)
   {
       try{

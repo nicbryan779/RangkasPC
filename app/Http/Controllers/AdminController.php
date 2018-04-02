@@ -90,6 +90,35 @@ class AdminController extends Controller
       return ("Login Failed!");
     }
   }
+  public function changepassword(Request $request,$id)
+  {
+    $oldpass = md5($request->oldpass);
+    $newpass = md5($request->newpass);
+    $confirm = md5($request->confirm);
+
+    $admin = $this->admin->find($id);
+
+    if($newpass == $confirm)
+    {
+      if($admin->password != $oldpass)
+      {
+        return ("Incorrect Password");
+      }
+      else {
+        try{
+          $admin->password = $newpass;
+          $admin->save();
+          return ("Password Changed");
+        }
+        catch(Exception $ex){
+          return ("Failed!");
+        }
+      }
+    }
+    else {
+      return ("Re-type password does not match");
+    }
+  }
   public function updateData(Request $request,$id)
   {
     $admin = $this->admin->find($id);

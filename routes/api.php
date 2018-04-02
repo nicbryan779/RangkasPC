@@ -22,6 +22,7 @@ Route::get('/user/{id}', "UserController@find");
 Route::delete('/user/{id}', "UserController@delete");
 Route::put('/user/{id}', "UserController@updateData");
 Route::post('/login', "UserController@login");
+Route::post('/changepassword/{id}',"UserController@changepassword");
 
 Route::get('register/confirm/{token}/{id}', 'UserController@confirmEmail');
 
@@ -43,3 +44,4 @@ Route::get('/admin/{id}', "AdminController@find");
 Route::delete('/admin/{id}', "AdminController@delete");
 Route::put('/admin/{id}', "AdminController@updateData");
 Route::post('/adminlogin',"AdminController@login");
+Route::post('/adminchangepass/{id}',"AdminController@changepassword");
