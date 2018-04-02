@@ -8,6 +8,6 @@ class Users extends Model
 {
     public $timestamps = false;
     protected $table="users";
-    protected $filleable = ['id','name','email','password','birthdate','phone','address','city','state','zip'];
+    protected $fillable = ['name','email','password','birthdate','phone','address','city','state','zip','token','status'];
     protected $hidden = ['password'];
 }

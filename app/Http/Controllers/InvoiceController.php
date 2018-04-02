@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\InvoiceModel;
+use App\Invoice;
 use Exception;
 
 class InvoiceController extends Controller

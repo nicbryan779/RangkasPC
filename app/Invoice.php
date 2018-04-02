@@ -8,6 +8,6 @@ class Invoice extends Model
 {
     public $timestamps = false;
     protected $table="invoices";
-    protected $filleable = ['id','user_id','total_price','total_item'];
+    protected $fillable = ['user_id','total_price','total_item'];
     protected $hidden = [];
 }

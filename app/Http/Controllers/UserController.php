@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UserModel;
+use App\Mail\Mailers\AppMailer;
+use App\Users;
 use Exception;
+use Mail;
 
 class UserController extends Controller
 {
   protected $user;
 
-  public function __construct(UserModel $user)
+  public function __construct(Users $user)
   {
     $this->user = $user;
   }
 
-  public function register(Request $request)
+  public function register(Request $request, AppMailer $mailer)
   {
+    $token=str_random(30);
     $user = [
       "name"  => $request->name,
       "email"  => $request->email,
@@ -27,14 +30,18 @@ class UserController extends Controller
       "city"  => $request->city,
       "state"  => $request->state,
       "zip"  => $request->zip,
+      "token" => $token
     ];
-
+    $to=$request->email;
     try{
       $user = $this->user->create($user);
+      $mailer->sendEmailConfirmationTo($user);
+      // flash('Please confirm your email address.');
+
       return response('Created',201);
     }
     catch(Exception $ex){
-      return response('Failed',400);
+      return response($ex,400);
     }
   }
 
@@ -101,5 +108,17 @@ class UserController extends Controller
     catch(Exception $ex){
       return response('Failed',400);
     }
+  }
+  public function confirmEmail($token,$id)
+  {
+      try{
+        $user = $this->user->where('token',$token)->first();
+        $user->status = "active";
+        $user->save();
+        return response('Email Verification Success');
+      }
+      catch(Exception $ex){
+        return response($ex,400);
+      }
   }
 }

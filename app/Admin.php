@@ -8,6 +8,6 @@ class Admin extends Model
 {
     public $timestamps = false;
     protected $table="admin";
-    protected $filleable = ['id','username','password'];
+    protected $fillable = ['username','password'];
     protected $hidden = ['password'];
 }

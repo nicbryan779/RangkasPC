@@ -8,6 +8,6 @@ class Product extends Model
 {
     public $timestamps = false;
     protected $table="products";
-    protected $filleable = ['id','type','name','brand','description','port','price','stock'];
+    protected $fillable = ['type','name','brand','description','port','price','stock'];
     protected $hidden = [];
 }
