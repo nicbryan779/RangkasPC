@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
   protected $product;
 
-  public function __construct(ProductModel $product)
+  public function __construct(Product $product)
   {
     $this->product = $product;
   }
@@ -22,9 +22,9 @@ class ProductController extends Controller
       "name"  => $request->name,
       "brand"  => $request->brand,
       "description"  => $request->description,
-      "port"  => $request->port,
       "price"  => $request->price,
       "stock"  => $request->stock,
+      "video" => $request->video
     ];
 
     try{
@@ -32,7 +32,7 @@ class ProductController extends Controller
       return response('Created',201);
     }
     catch(Exception $ex){
-      return response('Failed',400);
+      return response($ex,400);
     }
   }
 
@@ -80,9 +80,10 @@ class ProductController extends Controller
     $product->name = $request->input('name');
     $product->brand = $request->input('brand');
     $product->description = $request->input('description');
-    $product->port = $request->input('port');
     $product->price = $request->input('price');
     $product->stock = $request->input('stock');
+    $product->img = $request->input('img');
+    $product->video = $request->input('video');
     try{
       $product->save();
       return response('Updated',200);

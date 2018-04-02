@@ -35,3 +35,10 @@ Route::get('/invoice', "InvoiceController@all");
 Route::get('/invoice/{id}', "InvoiceController@find");
 Route::delete('/invoice/{id}', "InvoiceController@delete");
 Route::put('/invoice/{id}', "InvoiceController@updateData");
+
+Route::post('/admin', "AdminController@register");
+Route::get('/admin', "AdminController@all");
+Route::get('/admin/{id}', "AdminController@find");
+Route::delete('/admin/{id}', "AdminController@delete");
+Route::put('/admin/{id}', "AdminController@updateData");
+Route::post('/adminlogin',"AdminController@login");

@@ -10,7 +10,7 @@ class InvoiceController extends Controller
 {
   protected $invoice;
 
-  public function __construct(InvoiceModel $invoice)
+  public function __construct(Invoice $invoice)
   {
     $this->invoice = $invoice;
   }

@@ -112,7 +112,7 @@ class UserController extends Controller
   public function confirmEmail($token,$id)
   {
       try{
-        $user = $this->user->where('token',$token)->first();
+        $user = $this->user->where('token',$token)->where('id',$id)->first();
         $user->status = "active";
         $user->save();
         return response('Email Verification Success');
