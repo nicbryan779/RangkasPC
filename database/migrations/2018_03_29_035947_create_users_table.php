@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('city');
             $table->string('state');
             $table->integer('zip');
+            $table->string('status')->default('inactive');
+
 
 //            $table->timestamps();
         });

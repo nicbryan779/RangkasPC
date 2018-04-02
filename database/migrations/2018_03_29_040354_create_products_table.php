@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->char('port',8);
             $table->decimal('price', 5,2);
             $table->tinyInteger('stock');
+            $table->mediumInteger('watt')->unsigned();
 //            $table->timestamps();
         });
     }
