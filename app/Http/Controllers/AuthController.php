@@ -41,7 +41,7 @@ class AuthController extends Controller
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
-            return $validator->messages();
+            return response()->json(['success'=> false, 'error'=> $validator->messages()],400);
         }
         $user = [
           "name"  => $request->name,
@@ -66,7 +66,7 @@ class AuthController extends Controller
                 $mail->to($email, $name);
                 $mail->subject($subject);
             });
-        return 'Thanks for signing up! Please check your email to complete your registration.';
+        return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.'],200);
     }
     public function verifyUser($verification_code)
     {
@@ -74,14 +74,14 @@ class AuthController extends Controller
         if(!is_null($check)){
             $user = $this->user->where('id',$check->id)->first();
             if($user->is_verified == 1){
-                return 'Account is already verified..';
+                return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!'],400);
             }
             $user->is_verified = 1;
             $user->save();
             DB::table('user_verifications')->where('token',$verification_code)->delete();
-            return "Email is Successfully Verified";
+            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email'],200);
         }
-        return "Verification code is invalid.";
+        return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong'],400);
     }
     public function login(Request $request)
     {
@@ -94,17 +94,17 @@ class AuthController extends Controller
 
       $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
-            return $validator->messages();
+            return response()->json(['success'=> false, 'error'=> $validator->messages()],400);
         }
 
         $credentials['is_verified'] = 1;
         print_r($credentials['email']);
           try {
               if (! $token = JWTAuth::attempt($credentials)) {
-                  return "Invalid email/password";
+                  return response()->json(['success'=> false,  'message'=> 'Incorrect username/password'],400);
               }
           } catch (JWTException $ex) {
-              return 'Failed to login, please try again.';
+            return response()->json(['success'=> false, 'message'=> 'Failed to login! Please try again later!'],400);
           }
           return response()->json(['success' => true, 'data'=> [ 'token' => $token ]]);
     }
@@ -113,7 +113,7 @@ class AuthController extends Controller
 
         try {
             JWTAuth::invalidate();
-            return response()->json(['success' => true, 'message'=> "You have successfully logged out."]);
+            return response()->json(['success' => true, 'message'=> "You have successfully logged out."],200);
         } catch (JWTException $e) {
             return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.'], 500);
         }
