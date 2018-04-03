@@ -8,7 +8,7 @@
     <h1>Thanks for signing up!</h1>
 
     <p>
-        We just need you to <a href='{{ url("api/register/confirm/{$user->token}/{$user->id}") }}'>confirm your email address</a> real quick!
+        We just need you to <a href="{{ url('user/verify', $verification_code)}}">confirm your email address</a> real quick!
     </p>
 </body>
 </html>

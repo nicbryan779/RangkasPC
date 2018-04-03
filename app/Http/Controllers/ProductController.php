@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use Exception;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class ProductController extends Controller
 {
@@ -90,6 +92,29 @@ class ProductController extends Controller
     }
     catch(Exception $ex){
       return response('Failed',400);
+    }
+  }
+  public function updateImg(Request $request,$id)
+  {
+        $file = array('img' => Input::file('img'));
+        $destination = 'storage/Image';
+        $extension = Input::file('img')->getClientOriginalExtension();
+        $fileName = rand(000000,999999).'.'.$extension;
+        Input::file('img')->move($destination, $fileName);
+    try
+    {
+      $product = $this->product->find($id);
+      $default = $product->img;
+      $product->img = $fileName;
+      $product->save();
+      if($default != "default.png")
+      {
+        Storage::delete('storage/Image/'.$default);
+      }
+      return response('Sucessful', 201);
+    }
+    catch (\Exception $ex) {
+      return response($ex, 401);
     }
   }
 }

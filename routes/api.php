@@ -33,6 +33,7 @@ Route::get('/product', "ProductController@all");
 Route::get('/product/{id}', "ProductController@find");
 Route::delete('/product/{id}', "ProductController@delete");
 Route::put('/product/{id}', "ProductController@updateData");
+Route::post('/updateimg/{id}', "ProductController@updateImg");
 
 Route::post('/invoice', "InvoiceController@register");
 Route::get('/invoice', "InvoiceController@all");
@@ -47,3 +48,13 @@ Route::delete('/admin/{id}', "AdminController@delete");
 Route::put('/admin/{id}', "AdminController@updateData");
 Route::post('/adminlogin',"AdminController@login");
 Route::post('/adminchangepass/{id}',"AdminController@changepassword");
+
+Route::post('register', 'AuthController@register');
+Route::post('login', 'AuthController@login');
+Route::post('recover', 'AuthController@recover');
+Route::group(['middleware' => ['jwt.auth']], function() {
+    Route::get('logout', 'AuthController@logout');
+    Route::get('test', function(){
+        return response()->json(['foo'=>'bar']);
+    });
+});

@@ -24,8 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('city');
             $table->string('state');
             $table->integer('zip');
-            $table->string('token');
-            $table->string('status')->default('inactive');
 
 
 //            $table->timestamps();
@@ -41,4 +39,5 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
     }
+
 }
