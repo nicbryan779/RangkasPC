@@ -41,7 +41,7 @@ class AuthController extends Controller
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
-            return response()->json(['success'=> false, 'error'=> $validator->messages()],400);
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }
         $user = [
           "name"  => $request->name,
@@ -66,7 +66,7 @@ class AuthController extends Controller
                 $mail->to($email, $name);
                 $mail->subject($subject);
             });
-        return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.'],200);
+        return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
     }
     public function verifyUser($verification_code)
     {
@@ -74,14 +74,14 @@ class AuthController extends Controller
         if(!is_null($check)){
             $user = $this->user->where('id',$check->id)->first();
             if($user->is_verified == 1){
-                return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!'],400);
+                return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!']);
             }
             $user->is_verified = 1;
             $user->save();
             DB::table('user_verifications')->where('token',$verification_code)->delete();
-            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email'],200);
+            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email']);
         }
-        return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong'],400);
+        return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong']);
     }
     public function login(Request $request)
     {
@@ -101,12 +101,12 @@ class AuthController extends Controller
         print_r($credentials['email']);
           try {
               if (! $token = JWTAuth::attempt($credentials)) {
-                  return response()->json(['success'=> false,  'message'=> 'Incorrect username/password'],400);
+                  return response()->json(['success'=> false,  'message'=> 'Incorrect username/password'],401);
               }
           } catch (JWTException $ex) {
-            return response()->json(['success'=> false, 'message'=> 'Failed to login! Please try again later!'],400);
+            return response()->json(['success'=> false, 'message'=> 'Failed to login! Please try again later!'],500);
           }
-          return response()->json(['success' => true, 'data'=> [ 'token' => $token ]]);
+          return response()->json(['success' => true, 'data'=> [ 'token' => $token ]],200);
     }
     public function logout(Request $request) {
         // $this->validate($request, ['token' => 'required']);

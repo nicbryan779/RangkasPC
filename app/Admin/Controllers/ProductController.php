@@ -92,6 +92,7 @@ class ProductController extends Controller
             $form->display('id', 'ID');
             $form->text('type');
             $form->text('name');
+            $form->
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
         });
