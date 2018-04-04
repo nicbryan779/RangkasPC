@@ -72,7 +72,6 @@ return [
 
         'directory' => [
             'image' => 'images',
-            'file'  => 'files',
         ],
     ],
 

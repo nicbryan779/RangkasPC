@@ -92,7 +92,13 @@ class ProductController extends Controller
             $form->display('id', 'ID');
             $form->text('type');
             $form->text('name');
-            $form->
+            $form->text('brand');
+            $form->text('description');
+            $form->text('price');
+            $form->text('stock');
+            $form->text('sold');
+            $form->image('img')->uniqueName()->move('image');
+            $form->text('video');
             $form->display('created_at', 'Created At');
             $form->display('updated_at', 'Updated At');
         });

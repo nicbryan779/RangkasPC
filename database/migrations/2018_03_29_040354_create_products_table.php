@@ -20,8 +20,8 @@ class CreateProductsTable extends Migration
             $table->string('brand');
             $table->text('description');
             $table->decimal('price', 5,2);
-            $table->tinyInteger('stock');
-            $table->tinyInteger('sold')->default('0');
+            $table->integer('stock');
+            $table->integer('sold')->default('0');
             $table->string('img')->default("default.png");
             $table->string('video')->nullable();
         });
