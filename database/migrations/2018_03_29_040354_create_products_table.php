@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->integer('sold')->default('0');
             $table->string('img')->default("default.png");
             $table->string('video')->nullable();
+
         });
     }
 

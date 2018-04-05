@@ -117,4 +117,44 @@ class AuthController extends Controller
             return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.'], 500);
         }
     }
+    public function recover(Request $request)
+    {
+        $user = $this->user->where('email', $request->email)->first();
+        if (!$user) {
+            $error_message = "Your email address was not found.";
+            return response()->json(['success' => false, 'error' => ['email'=> $error_message]], 401);
+        }
+        $email = $user->email;
+        $name = $user->name;
+        $subject = "Reset Password";
+        $verification_code = str_random(30);
+        try {
+          Mail::send('reset', ['verification_code' => $verification_code],
+              function($mail) use ($email, $name, $subject){
+                  $mail->from("rangkaspc@gmail.com","RangkasPC.me");
+                  $mail->to($email, $name);
+                  $mail->subject($subject);
+              });
+          DB::table('password_resets')->insert(['email'=>$user->email,'token'=>$verification_code]);
+        } catch (\Exception $e) {
+            //Return with error
+            $error_message = $e->getMessage();
+            return response()->json(['success' => false, 'error' => $error_message], 401);
+        }
+        return response()->json([
+            'success' => true, 'data'=> ['message'=> 'A reset email has been sent! Please check your email.']
+        ]);
+    }
+    public function resetpass(Request $request, $verification_code)
+    {
+        $check = DB::table("password_resets")->where('token', $verification_code)->first();
+        if(!is_null($check)){
+            $user = $this->user->where('email',$check->email)->first();
+            $user->password = Hash::make($request->password);
+            $user->save();
+            DB::table('password_resets')->where('token',$verification_code)->delete();
+            return response()->json(['success'=> true, 'message'=> 'You have successfully created a new password']);
+        }
+        return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong. Please request for password change']);
+    }
 }

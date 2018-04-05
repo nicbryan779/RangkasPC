@@ -117,4 +117,14 @@ class ProductController extends Controller
       return response($ex, 401);
     }
   }
+  public function most_featured()
+  {
+    try {
+      $product = $this->product->orderBy('sold',"DESC")->take(2)->get();
+      return response()->json(['success'=>true, 'data'=>$product]);
+    } catch (Exception $ex) {
+      return $ex;
+      // return response()->json(['success'=>false, 'error'=>$ex]);
+    }
+  }
 }
