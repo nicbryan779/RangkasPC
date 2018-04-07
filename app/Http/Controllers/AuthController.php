@@ -41,7 +41,7 @@ class AuthController extends Controller
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
-            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
+            return response()->json(['success'=> false, 'error'=> $validator->messages()],422);
         }
         $user = [
           "name"  => $request->name,
@@ -72,6 +72,8 @@ class AuthController extends Controller
     {
         $check = DB::table('user_verifications')->where('token',$verification_code)->first();
         if(!is_null($check)){
+          if(!is_null($user))
+          {
             $user = $this->user->where('id',$check->id)->first();
             if($user->is_verified == 1){
                 return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!']);
