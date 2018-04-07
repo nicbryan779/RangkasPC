@@ -25,6 +25,7 @@ Route::delete('/product/{id}', "ProductController@delete");
 Route::put('/product/{id}', "ProductController@updateData");
 Route::post('/updateimg/{id}', "ProductController@updateImg");
 Route::get('/most_featured',"ProductController@most_featured");
+Route::get('/new_release',"ProductController@new_release");
 
 Route::post('/invoice', "InvoiceController@register");
 Route::get('/invoice', "InvoiceController@all");

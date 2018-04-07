@@ -123,8 +123,16 @@ class ProductController extends Controller
       $product = $this->product->orderBy('sold',"DESC")->take(2)->get();
       return response()->json(['success'=>true, 'data'=>$product]);
     } catch (Exception $ex) {
-      return $ex;
-      // return response()->json(['success'=>false, 'error'=>$ex]);
+      return response()->json(['success'=>false, 'error'=>$ex]);
+    }
+  }
+  public function new_release()
+  {
+    try {
+      $product = $this->product->orderBy('created_at',"DESC")->take(2)->get();
+      return response()->json(['success'=>true, 'data'=>$product]);
+    } catch (Exception $ex) {
+      return response()->json(['success'=>false, 'error'=>$ex]);
     }
   }
 }
