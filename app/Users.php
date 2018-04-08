@@ -9,7 +9,7 @@ class Users extends Authenticatable
 {
     public $timestamps = false;
     protected $table= "users";
-    protected $fillable = ['name','email','password','birthdate','phone','address','city','state','zip','status'];
+    protected $fillable = ['name','email','password','birthdate','phone','address','city','state','zip','is_verified'];
     protected $hidden = ['password'];
     public function getJWTIdentifier()
     {
