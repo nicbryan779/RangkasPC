@@ -183,11 +183,11 @@ class AuthController extends Controller
     public function getName()
     {
       $name = auth()->user()->name;
-      return response()->json(['success' => true, 'data' => ['name'=>$name]]);
+      return response()->json(['success'=>true, 'name'=>$name]);
     }
     public function getUser()
     {
       $user = auth()->user();
-      return response()->json(['success' => true, 'data' => $user]);
+      return response()->json(['success'=>true, 'user'=>$user]);
     }
 }
