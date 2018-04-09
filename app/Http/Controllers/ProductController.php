@@ -21,12 +21,15 @@ class ProductController extends Controller
     // $product = $this->product->where("id", "=", $id);
     try{
       $product = $this->product->find($id);
-      return response('Found',200);
+      if(!$product)
+      {
+        return response()->json(['success'=>false, 'message'=>'data not found'],400);
+      }
+      return response()->json(['success'=>true,'data'=>$product],200);
     }
     catch(Exception $ex){
-      return response('Failed',400);
+      return response()->json(['success'=>false, 'message'=>$ex],400);
     }
-
   }
   public function most_featured()
   {

@@ -18,12 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/forgetpassword/{verification_code}','AuthController@resetpass');
 
-Route::post('/product', "ProductController@register");
-Route::get('/product', "ProductController@all");
 Route::get('/product/{id}', "ProductController@find");
-Route::delete('/product/{id}', "ProductController@delete");
-Route::put('/product/{id}', "ProductController@updateData");
-Route::post('/updateimg/{id}', "ProductController@updateImg");
 Route::get('/most_featured',"ProductController@most_featured");
 Route::get('/new_release',"ProductController@new_release");
 
