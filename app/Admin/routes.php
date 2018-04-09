@@ -13,4 +13,6 @@ Route::group([
     $router->get('/', 'HomeController@index');
     $router->resource('/users', UserController::class);
     $router->resource('/products', ProductController::class);
+    $router->resource('/carousels', CarouselController::class);
+    $router->resource('/featureds',FeaturedController::class);
 });

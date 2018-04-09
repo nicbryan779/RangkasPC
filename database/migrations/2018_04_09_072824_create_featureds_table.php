@@ -15,9 +15,12 @@ class CreateFeaturedsTable extends Migration
     {
         Schema::create('featureds', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('');
+            $table->integer('product_id')->unsigned();
 //            $table->timestamps();
+        });
+
+        Schema::table('featureds', function($table){
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
