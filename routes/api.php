@@ -47,4 +47,6 @@ Route::post('recover', 'AuthController@recover');
 Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('logout', 'AuthController@logout');
     Route::put('editprofile', 'AuthController@EditProfile');
+    Route::put('getname', 'AuthController@getName');
+    Route::put('getuser', 'AuthController@getUser');
 });

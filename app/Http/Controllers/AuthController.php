@@ -180,4 +180,14 @@ class AuthController extends Controller
         return response()->json(['success'=>false, 'message'=> $ex],400);
       }
     }
+    public function getName()
+    {
+      $name = auth()->user()->name;
+      return response()->json(['success' = > true, 'data' => ['id'=>$name]]);
+    }
+    public function getUser()
+    {
+      $user = auth()->user();
+      return response()->json(['success' => true, 'data' => $user]);
+    }
 }
