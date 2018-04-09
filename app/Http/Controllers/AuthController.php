@@ -108,7 +108,7 @@ class AuthController extends Controller
           } catch (JWTException $ex) {
             return response()->json(['success'=> false, 'message'=> 'Failed to login! Please try again later!'],500);
           }
-          return response()->json(['success' => true, 'data'=> [ 'token' => $token ]],200);
+          return response()->json(['success' => true, 'data'=> [ 'token' => $token]],200);
     }
     public function logout(Request $request) {
         // $this->validate($request, ['token' => 'required']);
@@ -159,5 +159,25 @@ class AuthController extends Controller
             return response()->json(['success'=> true, 'message'=> 'You have successfully created a new password']);
         }
         return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong. Please request for password change']);
+    }
+    public function EditProfile(Request $request)
+    {
+      try{
+      $user = auth()->user();
+      $user->name = $request->input('name');
+      $user->email = $request->input('email');
+      $user->birthdate = $request->input('birthdate');
+      $user->phone = $request->input('phone');
+      $user->address = $request->input('address');
+      $user->city = $request->input('city');
+      $user->state = $request->input('state');
+      $user->zip = $request->input('zip');
+
+        $user->save();
+        return response()->json(['success'=>true, 'message'=> 'Changes saved']);
+      }
+      catch(Exception $ex){
+        return response()->json(['success'=>false, 'message'=> $ex],400);
+      }
     }
 }

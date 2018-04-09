@@ -16,6 +16,8 @@ class User extends Authenticatable
      * @var array
      */
 
+     public $timestamps = false;
+
     // THIS MODEL IS NOT USED,!!!
     protected $fillable = [
         'name', 'email', 'password',
