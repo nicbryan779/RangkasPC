@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Invoice;
-use Exception;
+use Exception;use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Validator, DB, Hash, Mail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Mail\Message;
 
 class InvoiceController extends Controller
 {
@@ -12,74 +16,37 @@ class InvoiceController extends Controller
 
   public function __construct(Invoice $invoice)
   {
-    $this->invoice = $invoice;
+    $this->invoice=$invoice;
   }
 
   public function register(Request $request)
   {
-    $invoice = [
-      "user_id"  => $request->user_id,
-      "total_price"  => $request->total_price,
-      "total_item"  => $request->total_item
-    ];
     try{
+      $invoice = [
+        'user_id'=> $request->id,
+        'total_price'=> $request->price,
+        'total_item'=> $request->amount
+      ];
       $invoice = $this->invoice->create($invoice);
-      return response('Created',201);
+      return response()->json(['success'=>true, 'message'=>'Data Created!']);
     }
     catch(Exception $ex){
-      return response('Failed',400);
-    }
-  }
-
-  public function all()
-  {
-    try{
-      $invoice = $this->invoice->all();
-      return $invoice;
-    }
-    catch(Exception $ex){
-      return response('Failed',400);
+      return response()->json(['success'=>false, 'messsage'=>$ex],401);
     }
   }
 
   public function find($id)
   {
-
-    // $Invoice = $this->Invoice->where("id", "=", $id);
     try{
       $invoice = $this->invoice->find($id);
-      return response('Found',200);
+      if($invoice->count()<1)
+      {
+        return response()->json(['success'=>false, 'messsage'=>'Data Not Found'],401);
+      }
+      return response()->json(['success'=>true,'invoice'=>$invoice]);
     }
     catch(Exception $ex){
-      return response('Failed',400);
-    }
-
-  }
-  public function delete($id)
-  {
-
-    try{
-      $invoice = $this->invoice->where('id',$id)->delete();
-      return response('Deleted',200);
-    }
-    catch(Exception $ex){
-      return response('Failed',400);
-    }
-
-  }
-  public function updateData(Request $request,$id)
-  {
-    $invoice = $this->invoice->find($id);
-
-    $invoice->user_id = $request->input('user_id');
-    $invoice->total_price = $request->input('total_price');
-    $invoice->total_item = $request->input('total_item');
-    try{
-      $invoice->save();
-      return response('Updated',200);
-    }
-    catch(Exception $ex){
-      return response('Failed',400);
+      return response()->json(['success'=>false, 'messsage'=>'Failed to get Data'],400);
     }
   }
 }

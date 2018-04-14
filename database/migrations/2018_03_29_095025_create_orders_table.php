@@ -17,8 +17,8 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('invoice_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            $table->decimal('total_price', 5,2);
-            $table->string('status');
+            $table->integer('total_price')->unsigned();
+            $table->integer('amount');
         });
 
         Schema::table('orders', function($table){

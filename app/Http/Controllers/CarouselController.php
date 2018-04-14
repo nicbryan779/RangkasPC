@@ -13,7 +13,6 @@ class CarouselController extends Controller
     {
       $this->carousel = $carousel;
     }
-
     public function getAll()
     {
       try {
@@ -22,10 +21,10 @@ class CarouselController extends Controller
           {
             return response()->json(['success'=>true, 'carousel'=>$carousel]);
           }
-          return response()->json(['success'=>false, 'messsage'=>'Data Not Found']);
+          return response()->json(['success'=>false, 'messsage'=>'Data Not Found'],401);
       }
       catch (Exception $ex) {
-        return response()->json(['success'=> false, 'message'=>'Unable to fetch carousel data']);
+        return response()->json(['success'=> false, 'message'=>'Unable to fetch carousel data'],400);
       }
     }
 }

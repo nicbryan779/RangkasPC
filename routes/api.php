@@ -31,6 +31,8 @@ Route::put('/invoice/{id}', "InvoiceController@updateData");
 Route::get('/getcarousel',"CarouselController@getAll");
 Route::get('/getfeatureds','FeaturedController@getAll');
 
+Route::post('invoice',"InvoiceController@register");
+
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
 Route::post('recover', 'AuthController@recover');
@@ -39,4 +41,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::put('editprofile', 'AuthController@EditProfile');
     Route::get('getname', 'AuthController@getName');
     Route::get('getuser', 'AuthController@getUser');
+    Route::post('addtocart/{id}', 'OrderController@addToCart');
 });

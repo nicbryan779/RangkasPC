@@ -16,8 +16,10 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->decimal('total_price', 5,2);
+            $table->integer('total_price')->unsigned();
             $table->tinyInteger('total_item');
+            $table->string('status')->default('Not Paid');
+            $table->timestamps();
         });
 
         Schema::table('invoices', function($table){

@@ -20,12 +20,12 @@ class FeaturedController extends Controller
           $featured = $this->featured->all();
           if($featured->count() < 1)
           {
-            return response()->json(['success'=>false, 'messsage'=>'Data Not Found']);
+            return response()->json(['success'=>false, 'messsage'=>'Data Not Found'],401);
           }
           return response()->json(['success'=>true, 'featured'=>$featured]);
       }
       catch (Exception $e) {
-        return response()->json(['success'=> false, 'message'=>'Unable to fetch featured data']);
+        return response()->json(['success'=> false, 'message'=>'Unable to fetch featured data'],400);
       }
     }
 }
