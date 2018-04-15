@@ -42,4 +42,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('getname', 'AuthController@getName');
     Route::get('getuser', 'AuthController@getUser');
     Route::post('addtocart/{id}', 'OrderController@addToCart');
+    Route::delete('removecart/{id}', 'OrderController@removefromcart');
 });

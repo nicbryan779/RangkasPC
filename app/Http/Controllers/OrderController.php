@@ -68,4 +68,33 @@ class OrderController extends Controller
         return response()->json(["success"=>false, "error"=>$ex]);
       }
     }
+    public function removefromcart($id)
+    {
+      try {
+        $user = auth()->user();
+        $order = $this->order->where('id',$id)->first();
+        if(!$order){
+          return response()->json(['success'=>false, 'message'=>"There is none of the specified item in the cart"]);
+        }
+        $invoice_id = $order->invoice_id;
+        $product = $this->product->where('id',$order->product_id)->first();
+        if($order->amount<2)
+        {
+          $order = $this->order->where('id',$id)->delete();
+        }
+        else {
+          $order->amount = $order->amount - 1;
+          $order->total_price = $order->total_price-$product->price;
+          $order->save();
+        }
+        $invoice = $this->invoice->where('id',$invoice_id)->first();
+        $invoice->total_item = $invoice->total_item - 1;
+        $invoice->total_price = $invoice->total_price - $product->price;
+        $invoice->save();
+        return response()->json(['success'=>true,"message"=>"Successfully removed from cart"]);
+      } catch (Exception $e) {
+        return response()->json(['success'=>false,"message"=>"Failed to remove from cart"]);
+      }
+
+    }
 }
