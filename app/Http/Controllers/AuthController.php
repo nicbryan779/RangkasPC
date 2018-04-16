@@ -81,10 +81,11 @@ class AuthController extends Controller
             $user->is_verified = 1;
             $user->save();
             DB::table('user_verifications')->where('token',$verification_code)->delete();
-            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email'],200);
+            //return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email'],200);
+            return redirect('http://localhost:4200/verificationsuccessful');
         }
       }
-      return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong'],401);
+      return redirect('http://localhost:4200/verificationfalse');
     }
     public function login(Request $request)
     {
