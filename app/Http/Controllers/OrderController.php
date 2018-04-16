@@ -109,6 +109,22 @@ class OrderController extends Controller
       } catch (Exception $ex) {
           return response()->json(["success"=>false,"message"=>$ex]);
       }
+    }
 
+    public function viewcart(InvoiceController $invoice)
+    {
+      try{
+        $user = auth()->user();
+        $invoice_id = $invoice->checkInvoice($user->id);
+        if($invoice_id==0)
+        {
+          return response()->json(["success"=>true,"data"=>[]]);
+        }
+        $order = $this->order->where('invoice_id',$invoice_id)->with('product')->get();
+        return response()->json(["success"=>true,"data"=>$order]);
+      }
+      catch (Exception $ex){
+        return response()->json(["success"=>false,"error"=>$ex]);
+      }
     }
 }
