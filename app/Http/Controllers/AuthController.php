@@ -76,15 +76,15 @@ class AuthController extends Controller
           if(!is_null($user))
           {
             if($user->is_verified == 1){
-                return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!']);
+                return response()->json(['success'=> false, 'message'=> 'You are already verified! Please login!'],400);
             }
             $user->is_verified = 1;
             $user->save();
             DB::table('user_verifications')->where('token',$verification_code)->delete();
-            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email']);
+            return response()->json(['success'=> true, 'message'=> 'You have successfully verified your email'],200);
         }
-        return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong']);
       }
+      return response()->json(['success'=> false, 'message'=> 'Oops! Your verification code is wrong'],401);
     }
     public function login(Request $request)
     {
