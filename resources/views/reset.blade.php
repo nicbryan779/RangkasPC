@@ -11,7 +11,7 @@
       <br>
       <br>
       <br>
-        Please <a href='localhost:4200/resetpassword/{{$verification_code}}'>click here</a> to create a new password!
+        Please <a href="http://localhost:4200/resetpassword/{{$verification_code}}">click here</a> to create a new password!
     </p>
 </body>
 </html>
