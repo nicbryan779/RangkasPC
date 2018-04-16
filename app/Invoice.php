@@ -10,4 +10,9 @@ class Invoice extends Model
     protected $table="invoices";
     protected $fillable = ['user_id','total_price','total_item','status'];
     protected $hidden = [];
+
+    public function order()
+    {
+        return $this->hasMany('App\Order');
+    }
 }

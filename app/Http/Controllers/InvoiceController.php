@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Invoice;
+use App\Users;
 use Exception;use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
@@ -99,6 +100,23 @@ class InvoiceController extends Controller
     }
     catch(Exception $ex){
       return response()->json(['success'=>false, 'messsage'=>$ex],401);
+    }
+  }
+
+  public function transactions()
+  {
+    try{
+      $user = auth()->user();
+      $invoice = $this->invoice->where('user_id',$user->id)->where('status',"Paid")->with('order')->get();
+      if(!$invoice)
+      {
+        return response()->json(["success"=>false,"message"=>"no data available"]);
+      }
+      return response()->json(["success"=>true,"data"=>$invoice]);
+    }
+    catch (Exception $ex)
+    {
+      return response()->json(["success"=>false,"message"=>$ex]);
     }
   }
 }

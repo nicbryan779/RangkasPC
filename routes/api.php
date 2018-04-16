@@ -47,4 +47,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::delete('removecart/{id}', 'OrderController@removefromcart');
     Route::get('add1/{id}', 'OrderController@add1item');
     Route::get('viewcart', 'OrderController@viewcart');
+    Route::get('transactions', 'InvoiceController@transactions');
 });
