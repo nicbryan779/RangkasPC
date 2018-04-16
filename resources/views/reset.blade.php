@@ -11,7 +11,7 @@
       <br>
       <br>
       <br>
-        Please <a href='{{ url("api/forgetpassword/$verification_code") }}'>click here</a> to create a new password!
+        Please <a href='{{ url("localhost:4200/resetpassword/$verification_code") }}'>click here</a> to create a new password!
     </p>
 </body>
 </html>
