@@ -72,7 +72,7 @@ class AuthController extends Controller
     {
         $check = DB::table('user_verifications')->where('token',$verification_code)->first();
         if(!is_null($check)){
-          $user = $this->user->where('id',$check->id)->first();
+          $user = $this->user->where('id',$check->user_id)->first();
           if(!is_null($user))
           {
             if($user->is_verified == 1){
