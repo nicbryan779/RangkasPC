@@ -49,4 +49,56 @@ class InvoiceController extends Controller
       return response()->json(['success'=>false, 'messsage'=>'Failed to get Data'],400);
     }
   }
+
+  public function invoiceupdateadd($id,$price,$item)
+  {
+    try{
+      $invoice = $this->invoice->where('id',$id)->first();
+      $invoice->total_price = $invoice->total_price + ($price*$item);
+      $invoice->total_item = $invoice->total_item + $item;
+      $invoice->save();
+    }
+    catch (Exception $ex) {
+      return $ex;
+    }
+  }
+  public function invoiceupdateremove($id,$price,$item)
+  {
+    try{
+      $invoice = $this->invoice->where('id',$id)->first();
+      $invoice->total_price = $invoice->total_price - ($price*$item);
+      $invoice->total_item = $invoice->total_item - $item;
+      $invoice->save();
+    }
+    catch (Exception $ex) {
+      return $ex;
+    }
+  }
+  public function checkInvoice($id)
+  {
+    try {
+      $invoice = $this->invoice->where('user_id',$id)->where('status',"Not Paid")->first();
+      if(!$invoice)
+      {
+        return 0;
+      }
+      return $invoice->id;
+    } catch (Exception $e) {
+      return $e;
+    }
+  }
+  public function createInvoice($user_id,$total_price,$total_item)
+  {
+    try{
+      $invoice = [
+        'user_id'=> $user_id,
+        'total_price'=> $total_price,
+        'total_item'=> $total_item
+      ];
+      $invoice = $this->invoice->create($invoice);
+    }
+    catch(Exception $ex){
+      return response()->json(['success'=>false, 'messsage'=>$ex],401);
+    }
+  }
 }

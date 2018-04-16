@@ -21,6 +21,7 @@ Route::post('/forgetpassword/{verification_code}','AuthController@resetpass');
 Route::get('/product/{id}', "ProductController@find");
 Route::get('/most_featured',"ProductController@most_featured");
 Route::get('/new_release',"ProductController@new_release");
+// Route::get('/getprice/{id}',"ProductController@get_price");
 
 Route::post('/invoice', "InvoiceController@register");
 Route::get('/invoice', "InvoiceController@all");
@@ -32,6 +33,7 @@ Route::get('/getcarousel',"CarouselController@getAll");
 Route::get('/getfeatureds','FeaturedController@getAll');
 
 Route::post('invoice',"InvoiceController@register");
+// Route::get('add1/{id}/{price}/{item}', "InvoiceController@invoiceupdateadd");
 
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
@@ -43,4 +45,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('getuser', 'AuthController@getUser');
     Route::post('addtocart/{id}', 'OrderController@addToCart');
     Route::delete('removecart/{id}', 'OrderController@removefromcart');
+    Route::get('add1/{id}', 'OrderController@add1item');
 });

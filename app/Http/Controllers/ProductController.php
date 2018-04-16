@@ -49,4 +49,18 @@ class ProductController extends Controller
       return response()->json(['success'=>false, 'error'=>$ex],400);
     }
   }
+  public function get_price($id)
+  {
+    try{
+      $product = $this->product->where('id',$id)->first();
+      if(!$product)
+      {
+        return response()->json(["success"=>false,"message"=>"item not found"]);
+      }
+      return $product->price;
+    }
+    catch (Exception $ex){
+      return $ex;
+    }
+  }
 }
