@@ -34,33 +34,32 @@ class OrderController extends Controller
         $user = auth()->user();
         $price = $product->get_price($id);
         $invoice_id = $invoice->checkInvoice($user->id);
-        print_r($invoice_id);
         $amount = $request->amount;
         $total=$price*$amount;
         if($invoice_id==0)
         {
-          print_r("HELLo");
           $invoice->createInvoice($user->id,$total,$amount);
+          $invoice_id = $invoice->checkInvoice($user->id);
         }
         else
         {
           $invoice->invoiceupdateadd($invoice_id,$price,$amount);
-          $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
-          if(!$order)
-          {
-            $order = [
-              'invoice_id'=>$invoice_id,
-              'product_id'=>$id,
-              'total_price'=>$amount*$price,
-              'amount'=>$amount
-            ];
-            $order = $this->order->create($order);
-          }
-          else {
-            $order->amount = $order->amount + $amount;
-            $order->total_price = $order->total_price + ($price*$amount);
-            $order->save();
-          }
+        }
+        $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
+        if(is_null($order))
+        {
+          $order = [
+            'invoice_id'=>$invoice_id,
+            'product_id'=>$id,
+            'total_price'=>$amount*$price,
+            'amount'=>$amount
+          ];
+          $order = $this->order->create($order);
+        }
+        else {
+          $order->amount = $order->amount + $amount;
+          $order->total_price = $order->total_price + ($price*$amount);
+          $order->save();
         }
 
         return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
