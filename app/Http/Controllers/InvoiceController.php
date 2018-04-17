@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Mail\Message;
+use App\Veritrans\Veritrans;
 
 class InvoiceController extends Controller
 {
@@ -18,6 +19,8 @@ class InvoiceController extends Controller
   public function __construct(Invoice $invoice)
   {
     $this->invoice=$invoice;
+    Veritrans::$serverKey = 'SB-Mid-server-z0nTwV8vP6eYLqSh09mXOiG9';
+    Veritrans::$isProduction = false;
   }
 
   public function register(Request $request)
@@ -118,5 +121,15 @@ class InvoiceController extends Controller
     {
       return response()->json(["success"=>false,"message"=>$ex]);
     }
+  }
+  public function checkout(OrderController $order)
+  {
+    $user = auth()->user();
+    $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
+    $transaction_details = array(
+            'order_id'          => uniqid(),
+            'gross_amount'  => $invoice->total_price
+        );
+    $items = $order->getItems($invoice->id);
   }
 }

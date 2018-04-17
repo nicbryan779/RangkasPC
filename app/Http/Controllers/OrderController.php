@@ -127,4 +127,18 @@ class OrderController extends Controller
         return response()->json(["success"=>false,"error"=>$ex]);
       }
     }
+
+    public function getItems($id, ProductController $product)
+    {
+      try{
+        $order = $this->order->where('invoice_id',$id)
+                    ->join('products', 'product_id','=','products.id')
+                    ->select('products.id','products.name','products.price','orders.amount')
+                    ->get();
+        return $order;
+      }
+      catch (Exception $ex) {
+        return $ex;
+      }
+    }
 }

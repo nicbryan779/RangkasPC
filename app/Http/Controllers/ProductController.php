@@ -80,4 +80,15 @@ class ProductController extends Controller
       return $ex;
     }
   }
+  public function getProduct($id)
+  {
+    try{
+      $product = $this->product->where('id',$id)->pluck('id','price','name');
+      return $product;
+    }
+    catch (Exception $ex)
+    {
+      return $ex;
+    }
+  }
 }

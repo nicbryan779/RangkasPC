@@ -17,7 +17,7 @@ class FeaturedController extends Controller
     public function getAll()
     {
       try {
-          $featured = $this->featured->all();
+          $featured = $this->featured->join('products','product_id','=','products.id')->select('products.*')->get();
           if($featured->count() < 1)
           {
             return response()->json(['success'=>false, 'messsage'=>'Data Not Found'],401);

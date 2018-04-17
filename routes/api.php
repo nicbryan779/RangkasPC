@@ -22,6 +22,7 @@ Route::get('/product/{id}', "ProductController@find");
 Route::get('/most_featured',"ProductController@most_featured");
 Route::get('/new_release',"ProductController@new_release");
 Route::get('all', "ProductController@all");
+Route::get('item/{id}',"OrderController@getItems");
 // Route::get('/getprice/{id}',"ProductController@get_price");
 
 Route::post('/invoice', "InvoiceController@register");
