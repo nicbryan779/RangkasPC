@@ -19,6 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->integer('total_price')->unsigned();
             $table->tinyInteger('total_item');
             $table->string('status')->default('Not Paid');
+            $table->string('payment_id')->nullable();
             $table->timestamps();
         });
 
