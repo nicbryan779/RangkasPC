@@ -53,4 +53,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('viewcart', 'OrderController@viewcart');
     Route::get('transactions', 'InvoiceController@transactions');
     Route::get('checkout','InvoiceController@checkout');
+    Route::post('confirmpayment','InvoiceController@notification');
 });

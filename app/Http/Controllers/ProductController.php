@@ -91,4 +91,30 @@ class ProductController extends Controller
       return $ex;
     }
   }
+  public function checkStock($id,$amount)
+  {
+    try {
+      $product = $this->product->where('id',$id)->first();
+      if($product->stock < $amount)
+      {
+        return 0;
+      }
+      else {
+        return 1;
+      }
+    } catch (Exception $ex) {
+      return $ex;
+    }
+  }
+  public function reduceStock($id,$amount)
+  {
+    $product = $this->product->where('id',$id)->first();
+    if(!is_null($product))
+    {
+      $product->stock = $product->stock - $amount;
+      $product->sold = $product->sold + $amount;
+      $product->save();
+    }
+    return "DATA NOT FOUND";
+  }
 }

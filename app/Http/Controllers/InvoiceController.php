@@ -128,7 +128,7 @@ class InvoiceController extends Controller
     $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
     $vt = new Veritrans;
     $transaction_details = array(
-            'order_id'          => uniqid(),
+            'order_id'          => $invoice->id,
             'gross_amount'  => $invoice->total_price
         );
     $items = $order->getItems($invoice->id);
@@ -159,5 +159,22 @@ class InvoiceController extends Controller
     {
       return $e->getMessage();
     }
+  }
+  public function notification(Request $request,OrderController $order, ProductController $product)
+  {
+      $vt = new Veritrans;
+      $invoice_id = $request->order_id;
+      $items_in_cart = $order->getCartItems($invoice_id);
+
+      foreach($items_in_cart as $item){
+        $product->reduceStock($item->product_id,$item->amount);
+      }
+
+      $invoice = $this->invoice->where('id',$invoice_id)->first();
+
+      $invoice->status = "Paid";
+      $invoice->save();
+
+      return response()->json(["success"=>true,"message"=>"Payment Complete!"],200);
   }
 }

@@ -7,8 +7,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Order;
 use App\Users;
-use App\Invoice;
-use App\Product;
 use Exception;use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
@@ -19,10 +17,8 @@ class OrderController extends Controller
 {
     protected $order;
     protected $user;
-    protected $invoice;
-    protected $product;
 
-    public function __construct(Order $order,Users $user, Invoice $invoice, Product $product)
+    public function __construct(Order $order,Users $user)
     {
       $this->order=$order;
       $this->user = $user;
@@ -35,34 +31,37 @@ class OrderController extends Controller
         $price = $product->get_price($id);
         $invoice_id = $invoice->checkInvoice($user->id);
         $amount = $request->amount;
-        $total=$price*$amount;
-        if($invoice_id==0)
+        if($product->checkStock($id,$amount))
         {
-          $invoice->createInvoice($user->id,$total,$amount);
-          $invoice_id = $invoice->checkInvoice($user->id);
+          $total=$price*$amount;
+          if($invoice_id==0)
+          {
+            $invoice->createInvoice($user->id,$total,$amount);
+            $invoice_id = $invoice->checkInvoice($user->id);
+          }
+          else
+          {
+            $invoice->invoiceupdateadd($invoice_id,$price,$amount);
+          }
+          $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
+          if(is_null($order))
+          {
+            $order = [
+              'invoice_id'=>$invoice_id,
+              'product_id'=>$id,
+              'total_price'=>$amount*$price,
+              'amount'=>$amount
+            ];
+            $order = $this->order->create($order);
+          }
+          else {
+            $order->amount = $order->amount + $amount;
+            $order->total_price = $order->total_price + ($price*$amount);
+            $order->save();
+          }
+          return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
         }
-        else
-        {
-          $invoice->invoiceupdateadd($invoice_id,$price,$amount);
-        }
-        $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
-        if(is_null($order))
-        {
-          $order = [
-            'invoice_id'=>$invoice_id,
-            'product_id'=>$id,
-            'total_price'=>$amount*$price,
-            'amount'=>$amount
-          ];
-          $order = $this->order->create($order);
-        }
-        else {
-          $order->amount = $order->amount + $amount;
-          $order->total_price = $order->total_price + ($price*$amount);
-          $order->save();
-        }
-
-        return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
+        return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"]);
       }
       catch(Exception $ex)
       {
@@ -99,13 +98,17 @@ class OrderController extends Controller
     {
       try {
         $user = auth()->user();
-        $order = $this->order->where('id',$id)->first();
-        $price = $product->get_price($order->product_id);
-        $order->amount = $order->amount+1;
-        $order->total_price = $order->total_price + $price;
-        $invoice->invoiceupdateadd($order->invoice_id,$price,1);
-        $order = $order->save();
-        return response()->json(["success"=>true, "message"=>"Added to cart"]);
+        if($product->checkStock($id,1))
+        {
+          $order = $this->order->where('id',$id)->first();
+          $price = $product->get_price($order->product_id);
+          $order->amount = $order->amount+1;
+          $order->total_price = $order->total_price + $price;
+          $invoice->invoiceupdateadd($order->invoice_id,$price,1);
+          $order = $order->save();
+          return response()->json(["success"=>true, "message"=>"Added to cart"]);
+        }
+        return response()->json(["success"=>false, "message"=>"Out of Stock!"]);
       } catch (Exception $ex) {
           return response()->json(["success"=>false,"message"=>$ex]);
       }
@@ -140,5 +143,10 @@ class OrderController extends Controller
       catch (Exception $ex) {
         return $ex;
       }
+    }
+    public function getCartItems($id)
+    {
+      $product_id = $this->order->where('invoice_id',$id)->get();
+      return $product_id;
     }
 }
