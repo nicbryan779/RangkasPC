@@ -191,4 +191,18 @@ class AuthController extends Controller
       $user = auth()->user();
       return response()->json(['success'=>true, 'user'=>$user]);
     }
+    public function getAddress()
+    {
+      $user = auth()->user();
+      $address = array(
+        "first_name" => $user->name,
+        "last_name" => "",
+        "address" => $user->address,
+        "city" => $user->city,
+        "postal_code" => $user->zip,
+        "phone"=>$user->phone,
+        "Country code" => "IDN"
+      );
+      return $address;
+    }
 }

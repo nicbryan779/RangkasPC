@@ -10,14 +10,14 @@ use App\Veritrans\Veritrans;
 class VtwebController extends Controller
 {
     public function __construct()
-    {   
-        Veritrans::$serverKey = '<your server key>';
+    {
+        Veritrans::$serverKey = 'SB-Mid-server-z0nTwV8vP6eYLqSh09mXOiG9';
 
         //set Veritrans::$isProduction  value to true for production mode
         Veritrans::$isProduction = false;
     }
 
-    public function vtweb() 
+    public function vtweb()
     {
         $vt = new Veritrans;
 
@@ -77,7 +77,7 @@ class VtwebController extends Controller
         // Data yang akan dikirim untuk request redirect_url.
         // Uncomment 'credit_card_3d_secure' => true jika transaksi ingin diproses dengan 3DSecure.
         $transaction_data = array(
-            'payment_type'          => 'vtweb', 
+            'payment_type'          => 'vtweb',
             'vtweb'                         => array(
                 //'enabled_payments'    => [],
                 'credit_card_3d_secure' => true
@@ -86,14 +86,14 @@ class VtwebController extends Controller
             'item_details'           => $items,
             'customer_details'   => $customer_details
         );
-    
+
         try
         {
             $vtweb_url = $vt->vtweb_charge($transaction_data);
             return redirect($vtweb_url);
-        } 
-        catch (Exception $e) 
-        {   
+        }
+        catch (Exception $e)
+        {
             return $e->getMessage;
         }
     }
@@ -124,7 +124,7 @@ class VtwebController extends Controller
               // TODO set payment status in merchant's database to 'Challenge by FDS'
               // TODO merchant should decide whether this transaction is authorized or not in MAP
               echo "Transaction order_id: " . $order_id ." is challenged by FDS";
-              } 
+              }
               else {
               // TODO set payment status in merchant's database to 'Success'
               echo "Transaction order_id: " . $order_id ." successfully captured using " . $type;
@@ -134,15 +134,15 @@ class VtwebController extends Controller
         else if ($transaction == 'settlement'){
           // TODO set payment status in merchant's database to 'Settlement'
           echo "Transaction order_id: " . $order_id ." successfully transfered using " . $type;
-          } 
+          }
           else if($transaction == 'pending'){
           // TODO set payment status in merchant's database to 'Pending'
           echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
-          } 
+          }
           else if ($transaction == 'deny') {
           // TODO set payment status in merchant's database to 'Denied'
           echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
         }*/
-   
+
     }
-}    
+}

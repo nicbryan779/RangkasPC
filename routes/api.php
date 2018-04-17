@@ -25,6 +25,8 @@ Route::get('all', "ProductController@all");
 Route::get('item/{id}',"OrderController@getItems");
 // Route::get('/getprice/{id}',"ProductController@get_price");
 
+Route::get('vtweb',"VtwebController@vtweb");
+
 Route::post('/invoice', "InvoiceController@register");
 Route::get('/invoice', "InvoiceController@all");
 Route::get('/invoice/{id}', "InvoiceController@find");
@@ -50,4 +52,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('add1/{id}', 'OrderController@add1item');
     Route::get('viewcart', 'OrderController@viewcart');
     Route::get('transactions', 'InvoiceController@transactions');
+    Route::get('checkout','InvoiceController@checkout');
 });

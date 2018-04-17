@@ -122,14 +122,42 @@ class InvoiceController extends Controller
       return response()->json(["success"=>false,"message"=>$ex]);
     }
   }
-  public function checkout(OrderController $order)
+  public function checkout(OrderController $order, AuthController $user1)
   {
     $user = auth()->user();
     $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
+    $vt = new Veritrans;
     $transaction_details = array(
             'order_id'          => uniqid(),
             'gross_amount'  => $invoice->total_price
         );
     $items = $order->getItems($invoice->id);
+    $billing_address = $user1->getAddress();
+    $customer_details = array(
+            'first_name'            => $user->name,
+            'last_name'             => "",
+            'email'                     => $user->email,
+            'phone'                     => $user->phone,
+            'billing_address' => $billing_address
+            );
+    $transaction_data = array(
+            'payment_type'          => 'vtweb',
+            'vtweb'                         => array(
+                //'enabled_payments'    => [],
+            'credit_card_3d_secure' => true
+            ),
+            'transaction_details'=> $transaction_details,
+            'item_details'           => $items,
+            'customer_details'   => $customer_details
+        );
+    try
+    {
+      $vtweb_url = $vt->vtweb_charge($transaction_data);
+      return redirect($vtweb_url);
+    }
+    catch (Exception $e)
+    {
+      return $e->getMessage();
+    }
   }
 }

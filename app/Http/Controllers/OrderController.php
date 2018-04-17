@@ -128,12 +128,12 @@ class OrderController extends Controller
       }
     }
 
-    public function getItems($id, ProductController $product)
+    public function getItems($id)
     {
       try{
         $order = $this->order->where('invoice_id',$id)
                     ->join('products', 'product_id','=','products.id')
-                    ->select('products.id','products.name','products.price','orders.amount')
+                    ->select('products.id','products.name','products.price','orders.amount as quantity')
                     ->get();
         return $order;
       }
