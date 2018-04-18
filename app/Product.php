@@ -18,7 +18,7 @@ class Product extends Model
     public function toSearchableArray()
       {
             $user = $this->toArray();
-            unset($user['sold'], $user['img'],$user['video'],$user['id'],$user['stock'],$user['created_at'],$user['updated_at'],$user['ObjectID']);
+            unset($user['sold'],$user['video'],$user['id'],$user['stock'],$user['created_at'],$user['updated_at'],$user['price']);
             return $user;
       }
 }

@@ -5,10 +5,25 @@
     <title>Sign Up Confirmation</title>
 </head>
 <body>
-    <h1>Thanks for signing up!</h1>
-
-    <p>
-        We just need you to <a href="{{ url('user/verify', $verification_code)}}">confirm your email address</a> real quick!
-    </p>
+  <table style="width:600px" border="0">
+    <tr>
+      <td style="background-color:red;color:white"><h1 style="font-family:Sugoe UI">RangkasPC</h1></td>
+    </tr>
+    <tr>
+      <td>
+        <p style="font-family:Sugoe UI;font-size:20px">
+            This is an email confimation email from RangkasPC.<br>
+            If you have not signed up to RangkasPC recently, please ignore this email.<br><br><br><br>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <form action="http://localhost:8000/user/verify/{{$verification_code}}">
+          <center><input style="font-size:20px;font-family:Sugoe UI" type="submit" value="Verify your email"></center>
+        </form>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
