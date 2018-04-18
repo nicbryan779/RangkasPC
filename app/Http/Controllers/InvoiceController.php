@@ -15,10 +15,12 @@ use App\Veritrans\Veritrans;
 class InvoiceController extends Controller
 {
   protected $invoice;
+  protected $user;
 
-  public function __construct(Invoice $invoice)
+  public function __construct(Invoice $invoice, Users $user)
   {
     $this->invoice=$invoice;
+    $this->user = $user;
     Veritrans::$serverKey = 'SB-Mid-server-z0nTwV8vP6eYLqSh09mXOiG9';
     Veritrans::$isProduction = false;
   }
@@ -172,8 +174,34 @@ class InvoiceController extends Controller
 
       $invoice = $this->invoice->where('id',$invoice_id)->first();
 
+      $user_id= $invoice->user_id;
+
       $invoice->status = "Paid";
       $invoice->save();
+
+      $user = $this->user->where('id',$user_id)->first();
+      $email = $user->email;
+      $name = $user->name;
+      $subject = "Thank you for your purchase!";
+
+      $string  = str_random(5)."-".str_random(5)."-".str_random(5);
+
+      foreach($items_in_cart as $item){
+        $product_name = $product->getProductName($item->product_id);
+        try {
+          Mail::send('code', ['verification_code' => $string,'product_name'=> $product_name ],
+              function($mail) use ($email, $name, $subject){
+                  $mail->from("rangkaspc@gmail.com","RangkasPC.me");
+                  $mail->to($email, $name);
+                  $mail->subject($subject);
+              });
+      }
+      catch (\Exception $e) {
+          //Return with error
+          $error_message = $e->getMessage();
+          return response()->json(['success' => false, 'error' => $error_message], 401);
+      }
+    }
 
       return response()->json(["success"=>true,"message"=>"Payment Complete!"],200);
   }

@@ -117,4 +117,15 @@ class ProductController extends Controller
     }
     return "DATA NOT FOUND";
   }
+  public function getProductName($id)
+  {
+    try{
+      $product = $this->product->where('id',$id)->pluck('name');
+      return $product;
+    }
+    catch (Exception $ex)
+    {
+      return $ex;
+    }
+  }
 }
