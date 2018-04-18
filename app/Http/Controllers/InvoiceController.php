@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Invoice;
 use App\Users;
-use Exception;use JWTAuth;
+use Exception;
+use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
 use Illuminate\Support\Facades\Password;
@@ -126,41 +127,40 @@ class InvoiceController extends Controller
   }
   public function checkout(OrderController $order, AuthController $user1)
   {
-    $user = auth()->user();
-    $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
-    $vt = new Veritrans;
-    $transaction_details = array(
-            'order_id'          => $invoice->id,
-            'gross_amount'  => $invoice->total_price
-        );
-    $items = $order->getItems($invoice->id);
-    $billing_address = $user1->getAddress();
-    $customer_details = array(
-            'first_name'            => $user->name,
-            'last_name'             => "",
-            'email'                     => $user->email,
-            'phone'                     => $user->phone,
-            'billing_address' => $billing_address
-            );
-    $transaction_data = array(
-            'payment_type'          => 'vtweb',
-            'vtweb'                         => array(
-                //'enabled_payments'    => [],
-            'credit_card_3d_secure' => true
-            ),
-            'transaction_details'=> $transaction_details,
-            'item_details'           => $items,
-            'customer_details'   => $customer_details
-        );
-    try
-    {
-      $vtweb_url = $vt->vtweb_charge($transaction_data);
-      return redirect($vtweb_url);
-    }
-    catch (Exception $e)
-    {
-      return $e->getMessage();
-    }
+      $user = auth()->user();
+      $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
+      $vt = new Veritrans;
+      $transaction_details = array(
+              'order_id'          => $invoice->id,
+              'gross_amount'  => $invoice->total_price
+          );
+      $items = $order->getItems($invoice->id);
+      $billing_address = $user1->getAddress();
+      $customer_details = array(
+              'first_name'            => $user->name,
+              'last_name'             => "",
+              'email'                     => $user->email,
+              'phone'                     => $user->phone,
+              'billing_address' => $billing_address
+              );
+      $transaction_data = array(
+              'payment_type'          => 'vtweb',
+              'vtweb'                         => array(
+              'credit_card_3d_secure' => true
+              ),
+              'transaction_details'=> $transaction_details,
+              'item_details'           => $items,
+              'customer_details'   => $customer_details
+          );
+      try
+      {
+        $vtweb_url = $vt->vtweb_charge($transaction_data);
+        return redirect($vtweb_url);
+      }
+      catch (Exception $e)
+      {
+        return $e->getMessage();
+      }
   }
   public function notification(Request $request,OrderController $order, ProductController $product)
   {
@@ -184,25 +184,26 @@ class InvoiceController extends Controller
       $name = $user->name;
       $subject = "Thank you for your purchase!";
 
-      $string  = str_random(5)."-".str_random(5)."-".str_random(5);
-
       foreach($items_in_cart as $item){
         $product_name = $product->getProductName($item->product_id);
-        try {
-          Mail::send('code', ['verification_code' => $string,'product_name'=> $product_name ],
-              function($mail) use ($email, $name, $subject){
-                  $mail->from("rangkaspc@gmail.com","RangkasPC.me");
-                  $mail->to($email, $name);
-                  $mail->subject($subject);
-              });
-      }
-      catch (\Exception $e) {
+        for($i=0;$i<$item->amount;$i++)
+        {
+          $string  = str_random(5)."-".str_random(5)."-".str_random(5);
+          try {
+            Mail::send('code', ['verification_code' => $string,'product_name'=> $product_name ],
+                function($mail) use ($email, $name, $subject){
+                    $mail->from("rangkaspc@gmail.com","RangkasPC.me");
+                    $mail->to($email, $name);
+                    $mail->subject($subject);
+                });
+          }
+          catch (\Exception $e) {
           //Return with error
           $error_message = $e->getMessage();
           return response()->json(['success' => false, 'error' => $error_message], 401);
+          }
+        }
       }
-    }
-
       return response()->json(["success"=>true,"message"=>"Payment Complete!"],200);
   }
 }

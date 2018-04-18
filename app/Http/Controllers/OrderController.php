@@ -57,7 +57,13 @@ class OrderController extends Controller
           else {
             $order->amount = $order->amount + $amount;
             $order->total_price = $order->total_price + ($price*$amount);
-            $order->save();
+            if($product->checkStock($id,$order->amount))
+            {
+              $order->save();
+            }
+            else{
+              return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"]);
+            }
           }
           return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
         }
