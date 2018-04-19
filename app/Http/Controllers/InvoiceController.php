@@ -125,7 +125,7 @@ class InvoiceController extends Controller
       return response()->json(["success"=>false,"message"=>$ex]);
     }
   }
-  public function checkout(OrderController $order, AuthController $user1)
+  public function checkout(OrderController $order, AuthController $user1, ProductController $product)
   {
       $user = auth()->user();
       $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
@@ -135,6 +135,15 @@ class InvoiceController extends Controller
               'gross_amount'  => $invoice->total_price
           );
       $items = $order->getItems($invoice->id);
+      $items_in_cart = $order->getCartItems($invoice->id);
+      foreach($items_in_cart as $item)
+      {
+        //return $product->checkStock($item->product_id,$item->amount);
+        if(!$product->checkStock($item->product_id,$item->amount))
+        {
+          return response()->json(["success"=>false,"message"=>"Item Stock is not enough"],400);
+        }
+      }
       $billing_address = $user1->getAddress();
       $customer_details = array(
               'first_name'            => $user->name,
