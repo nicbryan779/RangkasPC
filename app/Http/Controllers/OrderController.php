@@ -31,21 +31,36 @@ class OrderController extends Controller
         $price = $product->get_price($id);
         $invoice_id = $invoice->checkInvoice($user->id);
         $amount = $request->amount;
+        $count = 0;
         if($product->checkStock($id,$amount))
         {
           $total=$price*$amount;
-          if($invoice_id==0)
-          {
-            $invoice->createInvoice($user->id,$total,$amount);
-            $invoice_id = $invoice->checkInvoice($user->id);
-          }
-          else
-          {
-            $invoice->invoiceupdateadd($invoice_id,$price,$amount);
-          }
           $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
           if(is_null($order))
           {
+            $count = 1;
+          }
+          else
+          {
+            $order->amount = $order->amount + $amount;
+            $order->total_price = $order->total_price + ($price*$amount);
+            if($product->checkStock($id,$order->amount))
+            {
+              $order->save();
+              $count = 2;
+            }
+            else{
+              return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
+            }
+          }
+          if($count == 0)
+          {
+            return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
+          }
+          if($count== 1 && $invoice_id==0)
+          {
+            $invoice->createInvoice($user->id,$total,$amount);
+            $invoice_id = $invoice->checkInvoice($user->id);
             $order = [
               'invoice_id'=>$invoice_id,
               'product_id'=>$id,
@@ -53,18 +68,21 @@ class OrderController extends Controller
               'amount'=>$amount
             ];
             $order = $this->order->create($order);
+            return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
           }
-          else {
-            $order->amount = $order->amount + $amount;
-            $order->total_price = $order->total_price + ($price*$amount);
-            if($product->checkStock($id,$order->amount))
-            {
-              $order->save();
-            }
-            else{
-              return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
-            }
+          else if ($count==1 && $invoice_id!=0)
+          {
+            $invoice->invoiceupdateadd($invoice_id,$price,$amount);
+            $order = [
+              'invoice_id'=>$invoice_id,
+              'product_id'=>$id,
+              'total_price'=>$amount*$price,
+              'amount'=>$amount
+            ];
+            $order = $this->order->create($order);
+            return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
           }
+          $invoice->invoiceupdateadd($invoice_id,$price,$amount);
           return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
         }
         return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
