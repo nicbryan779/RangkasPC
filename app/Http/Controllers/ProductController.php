@@ -48,10 +48,10 @@ class ProductController extends Controller
     }
   }
 
-  public function most_featured()
+  public function best_seller()
   {
     try {
-      $product = $this->product->orderBy('sold',"DESC")->take(2)->get();
+      $product = $this->product->orderBy('sold',"DESC")->take(4)->get();
       return response()->json(['success'=>true, 'data'=>$product]);
     } catch (Exception $ex) {
       return response()->json(['success'=>false, 'error'=>$ex],400);
@@ -60,7 +60,7 @@ class ProductController extends Controller
   public function new_release()
   {
     try {
-      $product = $this->product->orderBy('created_at',"DESC")->take(2)->get();
+      $product = $this->product->orderBy('created_at',"DESC")->take(4)->get();
       return response()->json(['success'=>true, 'data'=>$product]);
     } catch (Exception $ex) {
       return response()->json(['success'=>false, 'error'=>$ex],400);

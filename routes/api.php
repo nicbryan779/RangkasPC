@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/forgetpassword/{verification_code}','AuthController@resetpass');
 
 Route::get('/product/{id}', "ProductController@find");
-Route::get('/most_featured',"ProductController@most_featured");
+Route::get('/best_seller',"ProductController@best_seller");
 Route::get('/new_release',"ProductController@new_release");
 Route::get('all', "ProductController@all");
 Route::get('item/{id}',"OrderController@getItems");
