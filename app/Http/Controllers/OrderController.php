@@ -62,16 +62,16 @@ class OrderController extends Controller
               $order->save();
             }
             else{
-              return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"]);
+              return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
             }
           }
           return response()->json(["success"=>true, "message"=>"successfully added to cart"]);
         }
-        return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"]);
+        return response()->json(["success"=>false, "message"=>"Item Stock Not Enough"],400);
       }
       catch(Exception $ex)
       {
-        return response()->json(["success"=>false, "error"=>$ex]);
+        return response()->json(["success"=>false, "error"=>$ex],400  );
       }
     }
     public function removefromcart($id,ProductController $product, InvoiceController $invoice)
