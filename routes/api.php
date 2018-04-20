@@ -40,6 +40,7 @@ Route::get('/getfeatureds','FeaturedController@getAll');
 
 Route::post('invoice',"InvoiceController@register");
 // Route::get('add1/{id}/{price}/{item}', "InvoiceController@invoiceupdateadd");
+  Route::post('confirmpayment','InvoiceController@notification');
 
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
@@ -55,5 +56,4 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('viewcart', 'OrderController@viewcart');
     Route::get('transactions', 'InvoiceController@transactions');
     Route::get('checkout','InvoiceController@checkout');
-    Route::post('confirmpayment','InvoiceController@notification');
 });

@@ -19,7 +19,7 @@ class CreateInvoicesTable extends Migration
             $table->integer('total_price')->unsigned();
             $table->tinyInteger('total_item');
             $table->string('status')->default('Not Paid');
-            $table->timestamps();
+            //$table->timestamps();
         });
 
         Schema::table('invoices', function($table){
