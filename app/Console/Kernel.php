@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        '\App\Console\Commands\RefreshStock',
     ];
 
     /**
@@ -26,8 +27,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('scout:import "App\Product"')
-                  ->everyMinute();
+        $schedule->command('RefreshStock:refresh')->everyMinute();
+        $schedule->command('scout:import "App\Product"')->everyMinute()->withoutOverlapping();
+
     }
 
     /**
