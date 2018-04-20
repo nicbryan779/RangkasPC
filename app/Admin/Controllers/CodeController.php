@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Featured;
+use App\Codes;
 
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -11,7 +11,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 
-class FeaturedController extends Controller
+class CodeController extends Controller
 {
     use ModelForm;
 
@@ -24,7 +24,7 @@ class FeaturedController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('Featured');
+            $content->header('Code');
             $content->description('description');
 
             $content->body($this->grid());
@@ -41,7 +41,7 @@ class FeaturedController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('Featured');
+            $content->header('Code');
             $content->description('description');
 
             $content->body($this->form()->edit($id));
@@ -57,7 +57,7 @@ class FeaturedController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('Featured');
+            $content->header('Code');
             $content->description('description');
 
             $content->body($this->form());
@@ -71,10 +71,10 @@ class FeaturedController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Featured::class, function (Grid $grid) {
+        return Admin::grid(Codes::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->columns('product_id');
+            $grid->columns('product_id','code');
         });
     }
 
@@ -85,10 +85,11 @@ class FeaturedController extends Controller
      */
     protected function form()
     {
-        return Admin::form(Featured::class, function (Form $form) {
+        return Admin::form(Codes::class, function (Form $form) {
 
             $form->display('id', 'ID');
             $form->text('product_id');
+            $form->text('code');
         });
     }
 }

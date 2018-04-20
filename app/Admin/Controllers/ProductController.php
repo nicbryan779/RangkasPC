@@ -96,7 +96,6 @@ class ProductController extends Controller
             $form->text('description');
             $form->text('gameplay');
             $form->text('price');
-            $form->text('stock');
             //$form->text('sold');
             $form->image('img')->uniqueName()->move('image');
             $form->text('video');

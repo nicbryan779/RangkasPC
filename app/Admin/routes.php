@@ -15,4 +15,5 @@ Route::group([
     $router->resource('/products', ProductController::class);
     $router->resource('/carousels', CarouselController::class);
     $router->resource('/featureds',FeaturedController::class);
+    $router->resource('/code',CodeController::class);
 });

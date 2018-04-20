@@ -121,21 +121,7 @@ class ProductController extends Controller
       return $ex;
     }
   }
-  public function checkStock($id,$amount)
-  {
-    try {
-      $product = $this->product->where('id',$id)->first();
-      if($product->stock < $amount)
-      {
-        return 0;
-      }
-      else {
-        return 1;
-      }
-    } catch (Exception $ex) {
-      return $ex;
-    }
-  }
+
   public function reduceStock($id,$amount)
   {
     $product = $this->product->where('id',$id)->first();
@@ -150,8 +136,8 @@ class ProductController extends Controller
   public function getProductName($id)
   {
     try{
-      $product = $this->product->where('id',$id)->pluck('name');
-      return $product;
+      $product = $this->product->where('id',$id)->first();
+      return $product->name;
     }
     catch (Exception $ex)
     {

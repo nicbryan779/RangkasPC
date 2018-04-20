@@ -24,7 +24,7 @@ class OrderController extends Controller
       $this->user = $user;
     }
 
-    public function addToCart(Request $request,$id, ProductController $product, InvoiceController $invoice)
+    public function addToCart(Request $request,$id, ProductController $product, InvoiceController $invoice, CodeController $code)
     {
       try{
         $user = auth()->user();
@@ -32,7 +32,7 @@ class OrderController extends Controller
         $invoice_id = $invoice->checkInvoice($user->id);
         $amount = $request->amount;
         $count = 0;
-        if($product->checkStock($id,$amount))
+        if($code->checkStock($id,$amount))
         {
           $total=$price*$amount;
           $order = $this->order->where('invoice_id',$invoice_id)->where('product_id',$id)->first();
@@ -44,7 +44,7 @@ class OrderController extends Controller
           {
             $order->amount = $order->amount + $amount;
             $order->total_price = $order->total_price + ($price*$amount);
-            if($product->checkStock($id,$order->amount))
+            if($code->checkStock($id,$order->amount))
             {
               $order->save();
               $count = 2;
@@ -118,12 +118,12 @@ class OrderController extends Controller
       }
     }
 
-    public function add1item($id,ProductController $product, InvoiceController $invoice)
+    public function add1item($id,ProductController $product, InvoiceController $invoice, CodeController $code)
     {
       try {
         $user = auth()->user();
         $order = $this->order->where('id',$id)->first();
-        if($product->checkStock($order->product_id,$order->amount+1))
+        if($code->checkStock($order->product_id,$order->amount+1))
         {
           $price = $product->get_price($order->product_id);
           $order->amount = $order->amount+1;

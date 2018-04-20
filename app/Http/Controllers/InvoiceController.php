@@ -125,7 +125,7 @@ class InvoiceController extends Controller
       return response()->json(["success"=>false,"message"=>$ex]);
     }
   }
-  public function checkout(OrderController $order, AuthController $user1, ProductController $product)
+  public function checkout(OrderController $order, AuthController $user1, ProductController $product, CodeController $code)
   {
       $user = auth()->user();
       $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
@@ -139,7 +139,7 @@ class InvoiceController extends Controller
       foreach($items_in_cart as $item)
       {
         //return $product->checkStock($item->product_id,$item->amount);
-        if(!$product->checkStock($item->product_id,$item->amount))
+        if(!$code->checkStock($item->product_id,$item->amount))
         {
           return response()->json(["success"=>false,"message"=>"Item Stock is not enough"],400);
         }
@@ -171,7 +171,7 @@ class InvoiceController extends Controller
         return $e->getMessage();
       }
   }
-  public function notification(Request $request,OrderController $order, ProductController $product)
+  public function notification(Request $request,OrderController $order, ProductController $product, CodeController $code)
   {
       $vt = new Veritrans;
       $invoice_id = $request->order_id;
@@ -197,14 +197,15 @@ class InvoiceController extends Controller
         $product_name = $product->getProductName($item->product_id);
         for($i=0;$i<$item->amount;$i++)
         {
-          $string  = str_random(5)."-".str_random(5)."-".str_random(5);
+          $string  = $code->getCode($item->product_id);
           try {
-            Mail::send('code', ['name'=>$name,'verification_code' => $string,'product_name'=> $product_name ],
+            Mail::send('code', ['name'=>$name,'verification_code' => $string,'product_name'=> $product_name],
                 function($mail) use ($email, $name, $subject){
                     $mail->from("rangkaspc@gmail.com","RangkasPC.me");
                     $mail->to($email, $name);
                     $mail->subject($subject);
                 });
+            $code->deleteCode($item->product_id);
           }
           catch (\Exception $e) {
           //Return with error
