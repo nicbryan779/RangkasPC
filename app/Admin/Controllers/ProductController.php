@@ -74,7 +74,7 @@ class ProductController extends Controller
         return Admin::grid(Product::class, function (Grid $grid) {
 
             $grid->id('ID')->sortable();
-            $grid->columns('type', 'name', 'brand', 'description', 'price', 'stock', 'sold', 'img', 'video');
+            $grid->columns('type', 'name', 'brand', 'description','gameplay', 'price','views', 'stock', 'sold', 'img', 'video');
             $grid->created_at();
             $grid->updated_at();
         });
@@ -94,9 +94,10 @@ class ProductController extends Controller
             $form->text('name');
             $form->text('brand');
             $form->text('description');
+            $form->text('gameplay');
             $form->text('price');
             $form->text('stock');
-            $form->text('sold');
+            //$form->text('sold');
             $form->image('img')->uniqueName()->move('image');
             $form->text('video');
             $form->display('created_at', 'Created At');

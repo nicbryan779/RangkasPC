@@ -12,7 +12,7 @@ class Product extends Model
 
     public $timestamps = true;
     protected $table = "products";
-    protected $fillable = ['type','name','brand','description','price','stock','sold','img','video'];
+    protected $fillable = ['type','name','brand','description','gameplay','price','views','stock','sold','img','video'];
     protected $hidden = [];
 
     public function toSearchableArray()

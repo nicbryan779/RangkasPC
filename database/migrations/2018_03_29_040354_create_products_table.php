@@ -19,8 +19,10 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('brand');
             $table->text('description');
+            $table->string('gameplay');
             $table->integer('price')->unsigned();
-            $table->integer('stock');
+            $table->integer('views')->unsigned()->default('0');
+            $table->integer('stock')->unsigned();
             $table->integer('sold')->default('0');
             $table->string('img')->default("default.png");
             $table->string('video')->nullable();

@@ -7,6 +7,7 @@ use App\Product;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
+use DB;
 
 class ProductController extends Controller
 {
@@ -20,10 +21,35 @@ class ProductController extends Controller
   {
     // $product = $this->product->where("id", "=", $id);
     try{
-      $product = $this->product->find($id);
+      $product = $this->product->where('id',$id)->first();
       if(!$product)
       {
         return response()->json(['success'=>false, 'message'=>'data not found'],400);
+      }
+      $product->views = $product->views+1;
+      $product->save();
+      return response()->json(['success'=>true,'data'=>$product],200);
+    }
+    catch(Exception $ex){
+      return response()->json(['success'=>false, 'message'=>$ex],400);
+    }
+  }
+
+  public function similar_products($id)
+  {
+    // $product = $this->product->where("id", "=", $id);
+    try{
+      $check = DB::table('products')->where('id',$id)->first();
+      if(!$check)
+      {
+        return response()->json(['success'=>false, 'message'=>'data not found'],400);
+      }
+      print_r($check->gameplay);
+      $product = $this->product->where('gameplay',$check->gameplay)->skip(1)->take(4)->get();
+      foreach($product as $products)
+      {
+        $products->views = $products->views+1;
+        $products->save();
       }
       return response()->json(['success'=>true,'data'=>$product],200);
     }
