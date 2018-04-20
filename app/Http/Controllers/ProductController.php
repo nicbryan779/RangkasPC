@@ -83,6 +83,15 @@ class ProductController extends Controller
       return response()->json(['success'=>false, 'error'=>$ex],400);
     }
   }
+  public function popular()
+  {
+    try {
+      $product = $this->product->orderBy('views',"DESC")->take(4)->get();
+      return response()->json(['success'=>true, 'data'=>$product]);
+    } catch (Exception $ex) {
+      return response()->json(['success'=>false, 'error'=>$ex],400);
+    }
+  }
   public function new_release()
   {
     try {

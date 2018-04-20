@@ -22,6 +22,7 @@ Route::get('/product/{id}', "ProductController@find");
 Route::get('/best_seller',"ProductController@best_seller");
 Route::get('/new_release',"ProductController@new_release");
 Route::get('similar/{id}',"ProductController@similar_products");
+Route::get('popular',"ProductController@popular");
 Route::get('all', "ProductController@all");
 Route::get('item/{id}',"OrderController@getItems");
 // Route::get('/getprice/{id}',"ProductController@get_price");
