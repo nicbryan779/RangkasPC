@@ -20,8 +20,8 @@
     </tr>
     <tr>
       <td>
-        <form action="http://localhost:8000/user/verify/{{$verification_code}}">
-          <center><input style="font-size:20px;font-family:sans-serif" type="submit" value="Verify your email"></center>
+        <form action="http://localhost:4200/resetpassword/{{$verification_code}}">
+          <center><input style="font-size:20px;font-family:sans-serif" type="submit" value="Create New Password"></center>
         </form>
       </td>
     </tr>
