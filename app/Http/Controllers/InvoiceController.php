@@ -199,7 +199,7 @@ class InvoiceController extends Controller
         {
           $string  = str_random(5)."-".str_random(5)."-".str_random(5);
           try {
-            Mail::send('code', ['verification_code' => $string,'product_name'=> $product_name ],
+            Mail::send('code', ['name'=>$name,'verification_code' => $string,'product_name'=> $product_name ],
                 function($mail) use ($email, $name, $subject){
                     $mail->from("rangkaspc@gmail.com","RangkasPC.me");
                     $mail->to($email, $name);

@@ -133,7 +133,7 @@ class AuthController extends Controller
         $subject = "Reset Password";
         $verification_code = str_random(30);
         try {
-          Mail::send('reset', ['verification_code' => $verification_code],
+          Mail::send('reset', ['name'=>$name,'verification_code' => $verification_code],
               function($mail) use ($email, $name, $subject){
                   $mail->from("rangkaspc@gmail.com","RangkasPC.me");
                   $mail->to($email, $name);

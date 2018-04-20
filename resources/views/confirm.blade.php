@@ -11,17 +11,27 @@
     </tr>
     <tr>
       <td>
-        <p style="font-family:Sugoe UI;font-size:20px">
-            This is an email confimation email from RangkasPC.<br>
-            If you have not signed up to RangkasPC recently, please ignore this email.<br><br><br><br>
+        <p style="font-family: sans-serif;font-size:15px">
+            Hi, {{$name}} <br><br>
+            Thank you for joining us at RangkasPC. Please click the button below to verify your email and start shopping with us!<br>
+            We wish you a great time. Happy Gaming!  :)<br><br>
         </p>
       </td>
     </tr>
     <tr>
       <td>
         <form action="http://localhost:8000/user/verify/{{$verification_code}}">
-          <center><input style="font-size:20px;font-family:Sugoe UI" type="submit" value="Verify your email"></center>
+          <center><input style="font-size:20px;font-family:sans-serif" type="submit" value="Verify your email"></center>
         </form>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p style="font-family:Sugoe UI;font-size:12px">
+          <br><br><br>
+            This is an email confimation email from RangkasPC.<br>
+            If you have not signed up to RangkasPC recently, please ignore this email.
+        </p>
       </td>
     </tr>
   </table>
