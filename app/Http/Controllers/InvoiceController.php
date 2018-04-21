@@ -130,12 +130,15 @@ class InvoiceController extends Controller
       $user = auth()->user();
       $invoice  = $this->invoice->where('user_id',$user->id)->where('status',"Not Paid")->first();
       $vt = new Veritrans;
+      $id = uniqid();
       $transaction_details = array(
-              'order_id'          => $invoice->id,
+              'order_id'          => $id,
               'gross_amount'  => $invoice->total_price
           );
+      $invoice->payment_id=$id;
       $items = $order->getItems($invoice->id);
       $items_in_cart = $order->getCartItems($invoice->id);
+      $invoice->save();
       foreach($items_in_cart as $item)
       {
         //return $product->checkStock($item->product_id,$item->amount);
@@ -174,17 +177,17 @@ class InvoiceController extends Controller
   public function notification(Request $request,OrderController $order, ProductController $product, CodeController $code)
   {
       $vt = new Veritrans;
-      $invoice_id = $request->order_id;
+      $invoice = $this->invoice->where('payment_id',$request->order_id)->first();
+      $invoice_id = $invoice->id;
       $items_in_cart = $order->getCartItems($invoice_id);
-
+      $today = date('y-m-d');
       foreach($items_in_cart as $item){
         $product->reduceStock($item->product_id,$item->amount);
       }
 
-      $invoice = $this->invoice->where('id',$invoice_id)->first();
-
       $user_id= $invoice->user_id;
-
+      $invoice->payment_date=$today;
+      $invoice->payment_type=$request->payment_type;
       $invoice->status = "Paid";
       $invoice->save();
 
