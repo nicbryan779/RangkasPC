@@ -44,7 +44,6 @@ class ProductController extends Controller
       {
         return response()->json(['success'=>false, 'message'=>'data not found'],400);
       }
-      print_r($check->gameplay);
       $product = $this->product->where('gameplay',$check->gameplay)->whereNotIn('id',[$check->id])->take(4)->orderBy('views',"DESC")->get();
       return response()->json(['success'=>true,'data'=>$product],200);
     }
