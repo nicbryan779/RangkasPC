@@ -113,7 +113,7 @@ class InvoiceController extends Controller
   {
     try{
       $user = auth()->user();
-      $invoice = $this->invoice->where('user_id',$user->id)->where('status',"Paid")->leftjoin('orders',"invoices.id",'=','orders.invoice_id')->join('products','orders.product_id',"=",'products.id')->select("invoices.*","orders.amount","products.name","products.price")->get();
+      $invoice = $this->invoice->where('user_id',$user->id)->where('status',"Paid")->leftjoin('orders',"invoices.id",'=','orders.invoice_id')->join('products','orders.product_id',"=",'products.id')->select("invoices.*","orders.amount","orders.total_price as subtotal","products.name","products.price","products.id as ProductID")->get();
       if(!$invoice)
       {
         return response()->json(["success"=>false,"message"=>"no data available"]);
