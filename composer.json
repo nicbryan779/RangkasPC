@@ -12,6 +12,7 @@
         "laravel/framework": "5.5.*",
         "laravel/scout": "^4.0",
         "laravel/tinker": "~1.0",
+        "phpmailer/phpmailer": "^6.0",
         "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
